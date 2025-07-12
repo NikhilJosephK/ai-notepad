@@ -9,7 +9,8 @@ export default async function Home() {
   } = await supabase.auth.getUser();
 
   const users = await db.select({ userId: usersTable.userId }).from(usersTable);
-  const userExists = users.some((item) => item.userId === user?.id);
+
+  const userExists = users.some((item) => item?.userId === user?.id);
   if (user && (users.length === 0 || !userExists)) {
     await db.insert(usersTable).values({
       userId: user.id,
