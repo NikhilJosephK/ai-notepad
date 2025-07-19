@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { addNotes } from "../actions/add-notes";
 import { getNotes } from "../actions/get-notes";
+import { Chat } from "./component";
 
 type UserDataProps = {
   id: number;
@@ -14,11 +15,17 @@ export default function NotesPage() {
   const [userData, setUserData] = useState<UserDataProps[] | null>(null);
 
   useEffect(() => {
-    async function hello() {
+    async function getNotesOnPageload() {
       const userData = await getNotes();
+      // console.log(userData);
+      // const data = userData.map((item) => {
+      //   return item.content + "~" + item.title + "~" + item.createdAt;
+      // });
+
+      // console.log(data.join("||"));
       setUserData(userData as UserDataProps[]);
     }
-    hello();
+    getNotesOnPageload();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -35,6 +42,7 @@ export default function NotesPage() {
 
   return (
     <section className="mt-28">
+      <Chat />
       <div className="border-b border-gray-300 rounded-md p-4 pb-20">
         <form
           className="flex flex-col gap-4 max-w-2xs w-full mx-auto"
