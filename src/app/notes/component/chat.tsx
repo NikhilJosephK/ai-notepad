@@ -55,7 +55,7 @@ export default function Chat() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer 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`,
+            Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
           },
           body: JSON.stringify({
             messages: [
