@@ -1,7 +1,16 @@
+"use client";
+
 import Link from "next/link";
 import SignoutBtn from "./signout-btn";
+import { usePathname } from "next/navigation";
 
-export default async function Header() {
+export default function Header() {
+  const pathName = usePathname();
+
+  if (pathName === "/login") {
+    return null;
+  }
+
   return (
     <nav className="flex border-b border-gray-200 p-4 fixed top-0 left-0 right-0 z-10 bg-white">
       <div className="flex items-center gap-4">

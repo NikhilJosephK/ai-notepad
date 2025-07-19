@@ -1,62 +1,11 @@
 import { db } from "@/db";
 import { usersTable } from "@/db/schema";
 import { createClient } from "@/utils/supabase/server";
+import Orb from "@/reactbits/backgrounds/Orb/Orb";
+import DecryptedText from "@/reactbits/text-animations/DecryptedText/DecryptedText";
+import TargetCursor from "@/reactbits/animations/TargetCursor/TargetCursor";
 
 export default async function Home() {
-  // const dummyData = [
-  //   {
-  //     content: "get milk",
-  //     createdAt: "sunday",
-  //   },
-  //   {
-  //     content: "dont forget to take book",
-  //     createdAt: "monday",
-  //   },
-  //   {
-  //     content: "go to uncles house",
-  //     createdAt: "tuesday",
-  //   },
-  //   {
-  //     content: "book tickets for party",
-  //     createdAt: "friday",
-  //   },
-  // ];
-
-  // try {
-  //   const dataArr = dummyData.map((item) => {
-  //     return item.content + "~" + "~" + item.createdAt;
-  //   });
-
-  //   const combinedText = dataArr.join("||");
-
-  //   const response = await fetch(
-  //     "https://api.groq.com/openai/v1/chat/completions",
-  //     {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
-  //       },
-  //       body: JSON.stringify({
-  //         messages: [
-  //           {
-  //             role: "user",
-  //             content: `go through the following text, understand the context of ${combinedText} and answer the question. The answer should be precise and to the point and you dont need to show how you arrived at the answer. Answer like how a human would answer. question: when are you going to uncles house?`,
-  //           },
-  //         ],
-  //         model: "compound-beta-mini",
-  //         temperature: 0.6,
-  //         max_completion_tokens: 1024,
-  //       }),
-  //     }
-  //   );
-  //   const data = await response.json();
-  //   console.log(data);
-  // } catch (error) {
-  //   console.log(error);
-  // }
-
-  // ////////
   const supabase = await createClient();
   const {
     data: { user },
@@ -73,10 +22,45 @@ export default async function Home() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-4xl font-bold text-center">
-        Welcome to AI Notepad! {`{${user?.email}}`}
-      </h1>
+    <div className="flex flex-col items-center justify-center h-screen bg-black">
+      <div style={{ width: "100%", height: "600px", position: "relative" }}>
+        <Orb
+          hoverIntensity={0.5}
+          rotateOnHover={true}
+          hue={0}
+          forceHoverState={false}
+        />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-left text-3xl font-normal w-full">
+          <div className="flex items-center justify-center gap-2">
+            <p className="bitcount-grid-single-100 font-extralight">
+              Welcome to AI Notepad,
+            </p>
+            <DecryptedText
+              text={`{${user?.email}}`}
+              animateOn="view"
+              revealDirection="start"
+              speed={200}
+              maxIterations={40}
+              useOriginalCharsOnly={true}
+              className="revealed"
+              parentClassName="all-letters"
+              encryptedClassName="encrypted text-white"
+            />
+          </div>
+        </div>
+        <div>
+          <TargetCursor
+            spinDuration={2}
+            hideDefaultCursor={false}
+          />
+          <a
+            href="/notes"
+            className="text-white px-4 py-2 border-white mx-auto flex justify-center w-fit cursor-target"
+          >
+            Take me to Notepad
+          </a>
+        </div>
+      </div>
     </div>
   );
 }
