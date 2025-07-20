@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { addNotes } from "../actions/add-notes";
 import { getNotes } from "../actions/get-notes";
 import Silk from "@/reactbits/backgrounds/Silk/Silk";
@@ -14,16 +14,16 @@ type UserDataProps = {
 };
 
 export default function NotesPage() {
+  console.log(process.env.NEXT_PUBLIC_GROQ_API_KEY);
   const [userData, setUserData] = useState<UserDataProps[] | null | []>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const formTitle = useRef<HTMLInputElement>(null);
+  const formContent = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     async function getNotesOnPageload() {
       const userData = await getNotes();
-      // const data = userData.map((item) => {
-      //   return item.content + "~" + item.title + "~" + item.createdAt;
-      // });
-      // console.log(data.join("||"));
+
       setUserData(userData as UserDataProps[]);
     }
     getNotesOnPageload();
@@ -31,14 +31,19 @@ export default function NotesPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const noteTitle = formData.get("title");
-    const noteContent = formData.get("content");
+    const noteTitle = formTitle.current?.value;
+    const noteContent = formContent.current?.value;
     const userData = await addNotes({
       title: noteTitle as string,
       content: noteContent as string,
     });
     setUserData(userData as UserDataProps[]);
+    if (formTitle.current) {
+      formTitle.current.value = "";
+    }
+    if (formContent.current) {
+      formContent.current.value = "";
+    }
   };
 
   return (
@@ -64,13 +69,15 @@ export default function NotesPage() {
             >
               <RippleGrid
                 enableRainbow={false}
-                gridColor="#ff2929"
-                rippleIntensity={0.05}
-                gridSize={7}
+                gridColor={isOpen ? "#fff" : "#ff2929"}
+                rippleIntensity={0.5}
+                gridSize={6}
                 gridThickness={15}
                 mouseInteraction={true}
                 mouseInteractionRadius={1.2}
-                opacity={0.8}
+                opacity={1}
+                fadeDistance={5}
+                vignetteStrength={5}
               />
             </button>
           </div>
@@ -88,6 +95,7 @@ export default function NotesPage() {
                 Title
               </label>
               <input
+                ref={formTitle}
                 type="text"
                 id="title"
                 placeholder="Enter title"
@@ -103,6 +111,7 @@ export default function NotesPage() {
                 Content
               </label>
               <textarea
+                ref={formContent}
                 id="content"
                 placeholder="Enter content"
                 name="content"
