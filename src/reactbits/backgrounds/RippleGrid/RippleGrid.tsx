@@ -36,6 +36,7 @@ const RippleGrid: React.FC<Props> = ({
   const mousePositionRef = useRef({ x: 0.5, y: 0.5 });
   const targetMouseRef = useRef({ x: 0.5, y: 0.5 });
   const mouseInfluenceRef = useRef(0);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const uniformsRef = useRef<any>(null);
 
   useEffect(() => {
@@ -254,6 +255,7 @@ void main() {
           "mouseenter",
           handleMouseEnter
         );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         containerRef.current.removeEventListener(
           "mouseleave",
           handleMouseLeave
@@ -262,7 +264,20 @@ void main() {
       renderer.gl.getExtension("WEBGL_lose_context")?.loseContext();
       containerRef.current?.removeChild(gl.canvas);
     };
-  }, []);
+  }, [
+    enableRainbow,
+    fadeDistance,
+    glowIntensity,
+    gridColor,
+    gridRotation,
+    gridSize,
+    gridThickness,
+    mouseInteraction,
+    mouseInteractionRadius,
+    opacity,
+    rippleIntensity,
+    vignetteStrength,
+  ]);
 
   useEffect(() => {
     if (!uniformsRef.current) return;
