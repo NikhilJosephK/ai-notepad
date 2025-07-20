@@ -3,6 +3,7 @@
 import { getNotes } from "@/app/actions/get-notes";
 import { useState, useRef } from "react";
 import Aurora from "@/reactbits/backgrounds/Aurora/Aurora";
+import getAiResponse from "@/app/actions/get-ai-response";
 
 type ChatProps = {
   question: string;
@@ -11,45 +12,22 @@ type ChatProps = {
 
 export default function Chat({ isOpen }: { isOpen: boolean }) {
   const formQuestion = useRef<HTMLInputElement>(null);
-
   const [grouped, setGrouped] = useState<ChatProps>([]);
+  const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    setIsSendButtonDisabled(true);
     const question = formQuestion.current?.value as string;
     setGrouped([...grouped, { question, answer: "" }]);
+    const userData = await getNotes();
+    const dataArr = userData.map((item) => {
+      return item.title + "~" + item.content + "~" + item.createdAt;
+    });
 
+    const combinedText = dataArr.join("||");
     try {
-      const userData = await getNotes();
-      const dataArr = userData.map((item) => {
-        return item.title + "~" + item.content + "~" + item.createdAt;
-      });
-
-      const combinedText = dataArr.join("||");
-
-      const response = await fetch(
-        "https://api.groq.com/openai/v1/chat/completions",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
-          },
-          body: JSON.stringify({
-            messages: [
-              {
-                role: "user",
-                content: `go through the following text, understand the context of ${combinedText} and if the question is related to the ${combinedText} then answer the question; else say "This is outside the scope of the notes". The answer should be precise and to the point and you dont need to show how you arrived at the answer. Answer like how a human would answer. question: ${question}`,
-              },
-            ],
-            model: "compound-beta-mini",
-            temperature: 0.6,
-            max_completion_tokens: 1024,
-          }),
-        }
-      );
-      const data = await response.json();
+      const data = await getAiResponse({ question, combinedText });
       let lastItem = grouped[grouped.length - 1];
       lastItem = {
         ...lastItem,
@@ -60,6 +38,7 @@ export default function Chat({ isOpen }: { isOpen: boolean }) {
       if (formQuestion.current) {
         formQuestion.current.value = "";
       }
+      setIsSendButtonDisabled(false);
     } catch (error) {
       console.log(error);
     }
@@ -108,6 +87,7 @@ export default function Chat({ isOpen }: { isOpen: boolean }) {
         />
         <button
           type="submit"
+          disabled={!!isSendButtonDisabled}
           className="bg-black text-white rounded-md p-2 basis-[70px] shrink-0 cursor-pointer"
         >
           Go
