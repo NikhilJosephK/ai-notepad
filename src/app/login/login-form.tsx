@@ -44,7 +44,13 @@ export default function LoginPage() {
         >
           Login
         </button>
-        <div className="flex justify-center mt-5">
+        <button
+          className="border rounded-xl p-4 text-white bg-black/30 font-bold cursor-pointer hover:bg-white/80 hover:text-black transition-all duration-300"
+          formAction={signup}
+        >
+          Sign up
+        </button>
+        {/* <div className="flex justify-center mt-5">
           <p className="text-white/80 text-base font-normal">
             Dont have an account?
           </p>
@@ -54,7 +60,7 @@ export default function LoginPage() {
           >
             Sign up
           </button>
-        </div>
+        </div> */}
       </div>
     </form>
   );
