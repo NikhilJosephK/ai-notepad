@@ -34,8 +34,7 @@ export default function Chat({ isOpen }: { isOpen: boolean }) {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            // Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
-            Authorization: `Bearer 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`,
+            Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
           },
           body: JSON.stringify({
             messages: [
