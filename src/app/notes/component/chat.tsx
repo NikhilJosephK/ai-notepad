@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 
+
+
 type ChatProps = {
   question: string;
   answer: string;
 }[];
 
-export default function Chat() {
+export default function Chat({ isOpen }: { isOpen: boolean }) {
   const dummyData = [
     {
       content: "get milk",
@@ -39,8 +41,6 @@ export default function Chat() {
     const formData = new FormData(e.target as HTMLFormElement);
     const question = formData.get("question") as string;
     setGrouped([...grouped, { question, answer: "" }]);
-
-    ////////////
 
     try {
       const dataArr = dummyData.map((item) => {
@@ -84,8 +84,12 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex flex-col gap-4 ">
-      <div className="border border-gray-300 rounded-2xl py-6 px-4  max-w-xl w-full h-[500px] overflow-y-auto  mx-auto">
+    <div
+      className={`flex flex-col gap-4 w-[400px] absolute bottom-28 right-10 z-10 border bg-black border-gray-300 rounded-2xl overflow-hidden  ${
+        isOpen ? "dropdown-open" : "dropdown-close"
+      }`}
+    >
+      <div className=" py-6 px-4  max-w-xl w-full h-[500px] overflow-y-auto  mx-auto">
         {grouped.map((item) => {
           return (
             <div key={Math.random()}>
