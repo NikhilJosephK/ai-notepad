@@ -49,10 +49,12 @@ export default async function Home() {
           </div>
         </div>
         <div>
-          <TargetCursor
-            spinDuration={2}
-            hideDefaultCursor={false}
-          />
+          <div className="max-md:hidden">
+            <TargetCursor
+              spinDuration={2}
+              hideDefaultCursor={false}
+            />
+          </div>
           <a
             href="/notes"
             className="text-white px-4 py-2 border-white mx-auto flex justify-center w-fit cursor-target"
