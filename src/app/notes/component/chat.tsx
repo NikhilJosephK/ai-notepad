@@ -46,7 +46,7 @@ export default function Chat({ isOpen }: { isOpen: boolean }) {
 
   return (
     <div
-      className={`flex flex-col gap-4 w-[400px] absolute bottom-28 right-10 z-10 border bg-black  border-gray-300 rounded-2xl overflow-hidden pb-5 ${
+      className={`flex flex-col gap-4 w-[400px] max-sm:max-w-[85%] max-sm:w-full absolute bottom-28 right-10 max-sm:right-7 z-10 border bg-black  border-gray-300 rounded-2xl overflow-hidden pb-5 ${
         isOpen ? "dropdown-open" : "dropdown-close"
       }`}
     >

@@ -31,8 +31,8 @@ export default async function Home() {
           forceHoverState={false}
         />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-left text-3xl font-normal w-full">
-          <div className="flex items-center justify-center gap-2">
-            <p className="bitcount-grid-single-100 font-extralight">
+          <div className="flex items-center justify-center gap-2 max-md:flex-col">
+            <p className="bitcount-grid-single-100 font-extralight max-sm:text-xl">
               Welcome to AI Notepad,
             </p>
             <DecryptedText

@@ -57,10 +57,10 @@ export default function NotesPage() {
           rotation={0}
         />
       </div>
-      <div className="absolute top-0 left-0 w-full h-full">
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
         <div>
           <Chat isOpen={isOpen} />
-          <div className="w-16 h-16 overflow-hidden absolute bottom-10 right-10 z-10 border-1 border-[#4229ff] rounded-full">
+          <div className="w-16 h-16 overflow-hidden absolute bottom-10 right-10 z-10 border-1 border-[#4229ff] rounded-full max-sm:right-7">
             <button
               onClick={() => {
                 setIsOpen(!isOpen);
@@ -126,13 +126,13 @@ export default function NotesPage() {
             </button>
           </form>
         </div>
-        <div className="overflow-scroll max-2xl:h-[450px] relative">
+        <div className="overflow-scroll max-2xl:h-[450px] relative pb-10">
           {!userData || userData?.length === 0 ? (
             <p className="text-white text-lg font-bold mx-1 pb-1 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
               {!userData ? "Loading..." : "No Notes Found"}
             </p>
           ) : (
-            <div className="columns-2 md:columns-3 lg:columns-4 px-24 my-10 gap-4">
+            <div className="md:columns-3 lg:columns-4 max-sm:columns-1 max-md:columns-2 px-24 max-md:px-4 my-10 gap-4">
               {userData?.map((note: UserDataProps) => (
                 <div
                   key={note?.id}

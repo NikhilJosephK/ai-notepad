@@ -2,9 +2,9 @@ import { login, signup } from "./actions";
 
 export default function LoginPage() {
   return (
-    <form className="w-[400px] bg-black/50 rounded-xl bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border border-gray-100 py-7 px-6">
+    <form className="w-[400px]  bg-black/50 rounded-xl bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border border-gray-100 py-7 px-6">
       <p className="text-white text-lg font-bold">Login to your account</p>
-      <p className="text-white/80 text-base font-normal">
+      <p className="text-white/80 text-base font-normal mt-2">
         Enter your email below to login to your account
       </p>
       <div className="flex flex-col gap-2 mt-10">
