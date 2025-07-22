@@ -81,7 +81,7 @@ export default function Chat({ isOpen }: { isOpen: boolean }) {
           ref={formQuestion}
           type="text"
           placeholder="Ask me anything"
-          className="border-b border-gray-300 p-2 grow text-white focus:outline-none"
+          className="border-b border-gray-300 p-2 sm:grow text-white focus:outline-none"
           name="question"
           autoComplete="off"
         />
