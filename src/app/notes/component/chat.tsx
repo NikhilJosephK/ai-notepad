@@ -75,13 +75,13 @@ export default function Chat({ isOpen }: { isOpen: boolean }) {
       </div>
       <form
         onSubmit={handleSubmit}
-        className="flex gap-2 max-w-xl w-full mx-auto justify-center items-center px-4"
+        className="flex gap-2 max-w-xl w-full mx-auto justify-center items-center px-4 max-sm:flex-col"
       >
         <input
           ref={formQuestion}
           type="text"
           placeholder="Ask me anything"
-          className="border-b border-gray-300 p-2 sm:grow text-white focus:outline-none"
+          className="border-b border-gray-300 p-2 sm:grow text-white focus:outline-none max-sm:w-full max-sm:text-center"
           name="question"
           autoComplete="off"
         />
