@@ -88,7 +88,7 @@ export default function Chat({ isOpen }: { isOpen: boolean }) {
         <button
           type="submit"
           disabled={!!isSendButtonDisabled}
-          className="bg-black text-white rounded-md p-2 basis-[70px] shrink-0 cursor-pointer"
+          className="bg-black text-white rounded-md p-2 sm:basis-[70px] dm:shrink-0 cursor-pointer"
         >
           Go
         </button>

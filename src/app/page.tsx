@@ -22,7 +22,7 @@ export default async function Home() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-black">
+    <div className="flex flex-col items-center justify-center h-[100dvh] bg-black">
       <div style={{ width: "100%", height: "600px", position: "relative" }}>
         <Orb
           hoverIntensity={0.5}
