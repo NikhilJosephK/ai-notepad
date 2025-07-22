@@ -3,7 +3,7 @@ import Lightning from "@/reactbits/backgrounds/Lightning/Lightning";
 
 export default function LoginPage() {
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-black">
+    <div className="flex flex-col items-center justify-center h-[100dvh] bg-black">
       <div className="w-full h-full relative">
         <Lightning
           hue={220}
