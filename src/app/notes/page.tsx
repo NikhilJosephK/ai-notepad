@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { addNotes } from "../actions/add-notes";
 import { getNotes } from "../actions/get-notes";
+import { deleteNotes } from "../actions/delete-notes";
 import Silk from "@/reactbits/backgrounds/Silk/Silk";
 import { Chat } from "./component";
 import RippleGrid from "@/reactbits/backgrounds/RippleGrid/RippleGrid";
@@ -15,11 +16,11 @@ type UserDataProps = {
 };
 
 export default function NotesPage() {
-  console.log(process.env.NEXT_PUBLIC_GROQ_API_KEY);
   const [userData, setUserData] = useState<UserDataProps[] | null | []>(null);
   const [isOpen, setIsOpen] = useState(false);
   const formTitle = useRef<HTMLInputElement>(null);
   const formContent = useRef<HTMLTextAreaElement>(null);
+  // const cardRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     async function getNotesOnPageload() {
@@ -152,7 +153,8 @@ export default function NotesPage() {
               {userData?.map((note: UserDataProps) => (
                 <div
                   key={note?.id}
-                  className="border border-gray-300 rounded-md p-4 mb-4 break-inside-avoid bg-white/10 backdrop-blur-sm"
+                  className="border border-gray-300 rounded-md p-4 mb-4 break-inside-avoid bg-white/10 backdrop-blur-sm relative"
+                  // ref={cardRef}
                 >
                   <h4 className="text-white text-lg font-bold mx-1 border-b pb-1">
                     {note?.title}
@@ -163,6 +165,23 @@ export default function NotesPage() {
                   <p className="text-white text-xs mt-3 mx-1 text-right">
                     {getDate(note?.createdAt)}
                   </p>
+                  <button
+                    className="absolute top-2 right-2 text-white text-xs w-5 h-5 border aspect-square flex items-center justify-center border-white bg-black/50 backdrop-blur-sm rounded-full cursor-pointer"
+                    onClick={() => {
+                      // if (cardRef.current) {
+                      //   cardRef.current.style.display = "none";
+                      // }
+                      async function getNotesOnDeletion() {
+                        const userData = await deleteNotes({
+                          noteId: note?.id,
+                        });
+                        setUserData(userData as UserDataProps[]);
+                      }
+                      getNotesOnDeletion();
+                    }}
+                  >
+                    x
+                  </button>
                 </div>
               ))}
             </div>
