@@ -11,6 +11,7 @@ type UserDataProps = {
   id: number;
   title: string;
   content: string;
+  createdAt: Date;
 };
 
 export default function NotesPage() {
@@ -45,6 +46,21 @@ export default function NotesPage() {
       formContent.current.value = "";
     }
   };
+
+  function getDate(dateString: string | Date) {
+    const date = new Date(dateString);
+
+    // Options to get day and date only
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+
+    const formattedDate = date.toLocaleDateString("en-IN", options);
+    return formattedDate;
+  }
 
   return (
     <section className="relative bg-[#4229ff]">
@@ -126,7 +142,7 @@ export default function NotesPage() {
             </button>
           </form>
         </div>
-        <div className="overflow-scroll max-2xl:h-[450px] relative pb-10">
+        <div className="overflow-scroll max-2xl:h-[450px] max-sm:h-[400px] relative pb-10">
           {!userData || userData?.length === 0 ? (
             <p className="text-white text-lg font-bold mx-1 pb-1 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
               {!userData ? "Loading..." : "No Notes Found"}
@@ -143,6 +159,9 @@ export default function NotesPage() {
                   </h4>
                   <p className="text-white text-sm mt-3 mx-1">
                     {note?.content}
+                  </p>
+                  <p className="text-white text-xs mt-3 mx-1 text-right">
+                    {getDate(note?.createdAt)}
                   </p>
                 </div>
               ))}
