@@ -223,11 +223,8 @@ export default function NotesPage() {
                         <button
                           className="text-white cursor-pointer"
                           type="button"
-                          onClick={() => {
-                            console.log(
-                              editInputRef?.current?.value,
-                              editTextAreaRef?.current?.value
-                            );
+                          onClick={(e) => {
+                            e.stopPropagation();
                             async function updateEditedNotes() {
                               try {
                                 const userDataResponse = await updateNotes({
@@ -249,7 +246,8 @@ export default function NotesPage() {
                         </button>
                         <button
                           className="text-white cursor-pointer"
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
                             console.log("clicked");
                             setStoreSelectedNote([]);
                           }}
