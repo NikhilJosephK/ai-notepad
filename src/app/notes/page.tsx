@@ -248,7 +248,6 @@ export default function NotesPage() {
                           className="text-white cursor-pointer"
                           onClick={(e) => {
                             e.stopPropagation();
-                            console.log("clicked");
                             setStoreSelectedNote([]);
                           }}
                         >
