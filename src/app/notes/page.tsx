@@ -17,10 +17,10 @@ type UserDataProps = {
 
 export default function NotesPage() {
   const [userData, setUserData] = useState<UserDataProps[] | null | []>(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const formTitle = useRef<HTMLInputElement>(null);
   const formContent = useRef<HTMLTextAreaElement>(null);
-  // const cardRef = useRef<HTMLDivElement | null>(null);
+  const [isSubmitBtnLoading, setIsSubmitBtnLoading] = useState<boolean>(false);
 
   useEffect(() => {
     async function getNotesOnPageload() {
@@ -33,6 +33,7 @@ export default function NotesPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitBtnLoading(true);
     const noteTitle = formTitle.current?.value;
     const noteContent = formContent.current?.value;
     const userData = await addNotes({
@@ -46,6 +47,7 @@ export default function NotesPage() {
     if (formContent.current) {
       formContent.current.value = "";
     }
+    setIsSubmitBtnLoading(false);
   };
 
   function getDate(dateString: string | Date) {
@@ -139,7 +141,7 @@ export default function NotesPage() {
               type="submit"
               className="bg-[#4229ff]/50 text-white rounded-md p-2 cursor-pointer backdrop-blur-sm"
             >
-              Add Note
+              {!isSubmitBtnLoading ? "Add Note" : "Adding..."}
             </button>
           </form>
         </div>
@@ -154,7 +156,6 @@ export default function NotesPage() {
                 <div
                   key={note?.id}
                   className="border border-gray-300 rounded-md p-4 mb-4 break-inside-avoid bg-white/10 backdrop-blur-sm relative"
-                  // ref={cardRef}
                 >
                   <h4 className="text-white text-lg font-bold mx-1 border-b pb-1">
                     {note?.title}
@@ -167,10 +168,14 @@ export default function NotesPage() {
                   </p>
                   <button
                     className="absolute top-2 right-2 text-white text-xs w-5 h-5 border aspect-square flex items-center justify-center border-white bg-black/50 backdrop-blur-sm rounded-full cursor-pointer"
-                    onClick={() => {
-                      // if (cardRef.current) {
-                      //   cardRef.current.style.display = "none";
-                      // }
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                      e.stopPropagation();
+
+                      const target = e.currentTarget.parentElement;
+                      if (target) {
+                        target.style.display = "none";
+                      }
+
                       async function getNotesOnDeletion() {
                         const userData = await deleteNotes({
                           noteId: note?.id,
