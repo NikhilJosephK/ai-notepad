@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { addNotes } from "../actions/add-notes";
 import { getNotes } from "../actions/get-notes";
 import { deleteNotes } from "../actions/delete-notes";
+import { updateNotes } from "../actions/update-notes";
 import Silk from "@/reactbits/backgrounds/Silk/Silk";
 import { Chat } from "./component";
 import RippleGrid from "@/reactbits/backgrounds/RippleGrid/RippleGrid";
@@ -21,12 +22,17 @@ export default function NotesPage() {
   const formTitle = useRef<HTMLInputElement>(null);
   const formContent = useRef<HTMLTextAreaElement>(null);
   const [isSubmitBtnLoading, setIsSubmitBtnLoading] = useState<boolean>(false);
+  const [storeSelectedNote, setStoreSelectedNote] = useState<UserDataProps[]>(
+    []
+  );
+
+  const editInputRef = useRef<HTMLInputElement>(null);
+  const editTextAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     async function getNotesOnPageload() {
-      const userData = await getNotes();
-
-      setUserData(userData as UserDataProps[]);
+      const userDataResponse = await getNotes();
+      setUserData(userDataResponse as UserDataProps[]);
     }
     getNotesOnPageload();
   }, []);
@@ -152,43 +158,111 @@ export default function NotesPage() {
             </p>
           ) : (
             <div className="md:columns-3 lg:columns-4 max-sm:columns-1 max-md:columns-2 px-24 max-md:px-4 my-10 gap-4">
-              {userData?.map((note: UserDataProps) => (
-                <div
-                  key={note?.id}
-                  className="border border-gray-300 rounded-md p-4 mb-4 break-inside-avoid bg-white/10 backdrop-blur-sm relative"
-                >
-                  <h4 className="text-white text-lg font-bold mx-1 border-b pb-1">
-                    {note?.title}
-                  </h4>
-                  <p className="text-white text-sm mt-3 mx-1">
-                    {note?.content}
-                  </p>
-                  <p className="text-white text-xs mt-3 mx-1 text-right">
-                    {getDate(note?.createdAt)}
-                  </p>
-                  <button
-                    className="absolute top-2 right-2 text-white text-xs w-5 h-5 border aspect-square flex items-center justify-center border-white bg-black/50 backdrop-blur-sm rounded-full cursor-pointer"
-                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                      e.stopPropagation();
-
-                      const target = e.currentTarget.parentElement;
-                      if (target) {
-                        target.style.display = "none";
-                      }
-
-                      async function getNotesOnDeletion() {
-                        const userData = await deleteNotes({
-                          noteId: note?.id,
-                        });
-                        setUserData(userData as UserDataProps[]);
-                      }
-                      getNotesOnDeletion();
+              {userData?.map((note: UserDataProps) => {
+                return (
+                  <div
+                    key={note?.id}
+                    className="border border-gray-300 rounded-md p-4 mb-4 break-inside-avoid bg-white/10 backdrop-blur-sm relative"
+                    onClick={() => {
+                      setStoreSelectedNote([note]);
                     }}
                   >
-                    x
-                  </button>
-                </div>
-              ))}
+                    {note?.id === storeSelectedNote[0]?.id ? (
+                      <input
+                        defaultValue={note?.title}
+                        className="text-white text-lg font-bold mx-1 border-b pb-1 w-full bg-white/10 rounded-t-md pl-1.5"
+                        type="text"
+                        ref={editInputRef}
+                      />
+                    ) : (
+                      <h4 className="text-white text-lg font-bold mx-1 border-b pb-1">
+                        {note?.title}
+                      </h4>
+                    )}
+                    {note?.id === storeSelectedNote[0]?.id ? (
+                      <textarea
+                        defaultValue={note?.content}
+                        className="text-white text-sm mt-3 mx-1 w-full bg-white/10 rounded-md pl-1.5"
+                        ref={editTextAreaRef}
+                      />
+                    ) : (
+                      <p className="text-white text-sm mt-3 mx-1">
+                        {note?.content}
+                      </p>
+                    )}
+                    <p className="text-white text-xs mt-3 mx-1 text-right">
+                      {getDate(note?.createdAt)}
+                    </p>
+
+                    {/* close button */}
+                    <button
+                      className="absolute top-2 right-2 text-white text-xs w-5 h-5 border aspect-square flex items-center justify-center border-white bg-black/50 backdrop-blur-sm rounded-full cursor-pointer"
+                      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                        e.stopPropagation();
+
+                        const target = e.currentTarget.parentElement;
+                        if (target) {
+                          target.style.display = "none";
+                        }
+
+                        async function getNotesOnDeletion() {
+                          const userDataResponse = await deleteNotes({
+                            noteId: note?.id,
+                          });
+                          setUserData(userDataResponse as UserDataProps[]);
+                        }
+                        getNotesOnDeletion();
+                      }}
+                    >
+                      x
+                    </button>
+
+                    {/* save and cancel button */}
+                    {note?.id === storeSelectedNote[0]?.id && (
+                      <div className="flex gap-4 items-center mt-2">
+                        <button
+                          className="text-white cursor-pointer"
+                          type="button"
+                          onClick={() => {
+                            console.log(
+                              editInputRef?.current?.value,
+                              editTextAreaRef?.current?.value
+                            );
+                            async function updateEditedNotes() {
+                              try {
+                                const userDataResponse = await updateNotes({
+                                  noteId: note?.id,
+                                  title: editInputRef?.current?.value || "",
+                                  content:
+                                    editTextAreaRef?.current?.value || "",
+                                });
+                                setUserData(userDataResponse);
+                                setStoreSelectedNote([]);
+                              } catch (err) {
+                                console.log(err);
+                              }
+                            }
+                            updateEditedNotes();
+                          }}
+                        >
+                          Save
+                        </button>
+                        <button
+                          className="text-white cursor-pointer"
+                          onClick={() => {
+                            console.log("clicked");
+                            setStoreSelectedNote([]);
+                          }}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    )}
+
+                    {/*  */}
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
