@@ -40,7 +40,7 @@ export default async function Home() {
               animateOn="view"
               revealDirection="start"
               speed={200}
-              maxIterations={40}
+              maxIterations={15}
               useOriginalCharsOnly={true}
               className="revealed"
               parentClassName="all-letters"
