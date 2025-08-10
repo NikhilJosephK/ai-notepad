@@ -15,6 +15,7 @@ export default function LoginPage() {
   async function isLogin(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     setIsLoginFailed(null);
+    setIsSignupFailed(null);
     setIsLoading("Loading...");
     const formData = {
       email: emailRef?.current?.value || "",
@@ -30,6 +31,7 @@ export default function LoginPage() {
   async function isSignup(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     setIsSignupFailed(null);
+    setIsLoginFailed(null);
     setIsSignupLoading("Loading...");
     const formData = {
       email: emailRef?.current?.value || "",
